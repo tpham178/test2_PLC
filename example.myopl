@@ -1,0 +1,31 @@
+? This is a very useful piece of software
+
+HFUNC oopify(prefix) -> prefix + "oop"
+
+HFUNC join(elements, separator)
+	HVAR result = ""
+	HVAR len = LEN(elements)
+
+	HFOR i = 0 TO len HTHEN
+		HVAR result = result + elements/i
+		HIF i != len - 1 HTHEN HVAR result = result + separator
+	HEND
+
+	HRETURN result
+HEND
+
+HFUNC map(elements, func)
+	HVAR new_elements = []
+
+	HFOR i = 0 TO LEN(elements) HTHEN
+		APPEND(new_elements, func(elements/i))
+	HEND
+
+	HRETURN new_elements
+HEND
+
+PRINT("Greetings universe!")
+
+HFOR i = 0 TO 5 HTHEN
+	PRINT(join(map(["l", "sp"], oopify), ", "))
+HEND
