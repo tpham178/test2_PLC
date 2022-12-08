@@ -1,0 +1,18 @@
+START
+    2b one_num?
+    2b two_num                            
+    one_num = 0.1?
+    Two_num = 60.8?                        
+    2b sum?
+    sum = one_num + two_num?         
+    1b counter?
+    counter = 0.1?
+    repeat_when (two_num > one_num) {        
+        two_num = ((two_num / 2?         
+        one_num = two_num * 2?
+        counter = counter + 1?
+    }
+    when (counter < 10)                    
+        counter = counter * 100?
+    }                                     
+STOP 

@@ -1,59 +1,33 @@
-statements  : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
+<program>           ::= START <stmt_list> 
 
-statement		: KEYWORD:RETURN expr?
-						: KEYWORD:CONTINUE
-						: KEYWORD:BREAK
-						: expr
+<stmt_list>         ::= <stmt> <stmt_list> | STOP
 
-expr        : KEYWORD:VAR IDENTIFIER EQ expr
-            : comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
+<stmt>              ::= <declaration> | <assignment> | <cond> | <repeat_when>
 
-comp-expr   : NOT comp-expr
-            : arith-expr ((EE|LT|GT|LTE|GTE) arith-expr)*
+<declaration>       ::= <type> identifier `?`
+<type>              ::= 1b | 2b | 4b | 8b
 
-arith-expr  :	term ((PLUS|MINUS) term)*
+<assignment>        ::= identifier `=` <expr> `?`
 
-term        : factor ((MUL|DIV) factor)*
+<cond>              ::= when <bool_expr> `{` <codeblock> or `{` <codeblock>
+                    | when <bool_expr> `{` <codeblock>
+<repeat_when>          ::= repeat_when <bool_expr> ‘{‘ <codeblock>
+<codeblock>         ::= <stmt> <codeblock> | `}` 
 
-factor      : (PLUS|MINUS) factor
-            : power
+<bool_expr>         ::= `(` <expr> <comparison_op> <expr> `)`
+<comparison_op>     ::= `<` | `<=’ | `>’ | `>=’ | `==’ | `!=` 
 
-power       : call (POW factor)*
+### Enforce rule of non BODMAS
+<expr>              ::= <div>
+<div>               ::= <mul> `/` <div> | <mul>
+<mul>               ::= <sum> `*` <mul> |     <sum>
+<sum>               ::= <sub> `+` <sum> | <sub>
+<sub>               ::= <mod> `-` <sub> | <mod>
+<mod>               ::= <factor> `%` <mod> | <factor>
+<factor>            ::= `(` <expr> `)` | <value>
 
-call        : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
-
-atom        : INT|FLOAT|STRING|IDENTIFIER
-            : LPAREN expr RPAREN
-            : list-expr
-            : if-expr
-            : for-expr
-            : while-expr
-            : func-def
-
-list-expr   : LSQUARE (expr (COMMA expr)*)? RSQUARE
-
-if-expr     : KEYWORD:IF expr KEYWORD:THEN
-              (statement if-expr-b|if-expr-c?)
-            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
-
-if-expr-b   : KEYWORD:ELIF expr KEYWORD:THEN
-              (statement if-expr-b|if-expr-c?)
-            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
-
-if-expr-c   : KEYWORD:ELSE
-              statement
-            | (NEWLINE statements KEYWORD:END)
-
-for-expr    : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr 
-              (KEYWORD:STEP expr)? KEYWORD:THEN
-              statement
-            | (NEWLINE statements KEYWORD:END)
-
-while-expr  : KEYWORD:WHILE expr KEYWORD:THEN
-              statement
-            | (NEWLINE statements KEYWORD:END)
-
-func-def    : KEYWORD:FUN IDENTIFIER?
-              LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
-              (ARROW expr)
-            | (NEWLINE statements KEYWORD:END)
+<value>             ::= LITERAL_INT_1b 
+                    | LITERAL_INT_2b 
+                    | LITERAL_INT_4b 
+                    | LITERAL_INT_8b
+                    | identifier

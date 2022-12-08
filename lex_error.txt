@@ -1,0 +1,15 @@
+START                          
+    1num = 10;
+    1b thisissum?                      
+    repeat_when (1num ==$ 0) {              
+        when (1num > 5) {        
+            1num = 1num - 2.            
+        } or {
+            1num = 1num @ 1;            
+        }
+
+        when (thisissum === 100) {       
+            thisissum = thisissum + 1num?
+        }
+    }
+STOP 

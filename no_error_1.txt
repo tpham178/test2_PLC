@@ -1,0 +1,10 @@
+START
+    sm_num = 0.2?
+    big_num = 65530.2? 
+    counter = 0.1?
+    repeat_when (sm_num < big_num) {
+        sm_num = sm_num * 2?
+        big_num = big_num / 2?
+        counter = counter + 1?
+    }
+STOP

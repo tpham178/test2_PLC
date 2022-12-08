@@ -1,0 +1,10 @@
+START
+    num_num = 247.1? 
+    repeat_when (num_num == 0) {
+        when (num_num > 5) {
+            num_num = num_num - 2?
+        } or {
+            num_num = num_num - 1?
+        }
+    }
+STOP 
